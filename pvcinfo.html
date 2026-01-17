@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GPREC Photography Club – Member Verification</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI, Arial, sans-serif;
+  background:#0b0b0b;
+  color:#fff;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:30px 20px;
+}
+.header{
+  text-align:center;
+  margin-bottom:35px;
+}
+.header img{
+  width:130px;
+  margin-bottom:15px;
+}
+.header h1{
+  margin:0;
+  letter-spacing:2px;
+}
+.header p{
+  color:#aaa;
+  font-size:14px;
+}
+.login-box{
+  background:#141414;
+  border:1px solid #2a2a2a;
+  border-radius:12px;
+  padding:30px;
+  max-width:420px;
+  margin:auto;
+  text-align:center;
+}
+.login-box input{
+  width:100%;
+  padding:12px;
+  margin-top:18px;
+  background:#0f0f0f;
+  border:1px solid #3a3a3a;
+  color:#fff;
+  border-radius:6px;
+}
+.login-box button{
+  margin-top:22px;
+  padding:12px;
+  width:100%;
+  background:#fff;
+  color:#000;
+  border:none;
+  border-radius:6px;
+  font-weight:600;
+  cursor:pointer;
+}
+.profile{
+  display:none;
+  margin-top:45px;
+  background:#151515;
+  border:2px solid #fff;
+  border-radius:14px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 0 25px rgba(255,255,255,0.25);
+}
+.profile img{
+  width:150px;
+  height:150px;
+  object-fit:cover;
+  border-radius:50%;
+  border:3px solid #fff;
+}
+.profile h2{
+  margin:12px 0;
+}
+.profile .info{
+  color:#ccc;
+  margin:6px 0;
+  font-size:14px;
+}
+.status{
+  margin-top:10px;
+  font-weight:bold;
+  color:#9affc2;
+}
+.error{
+  margin-top:15px;
+  color:#ff6b6b;
+  display:none;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="header">
+    <img src="logo.png" alt="GPREC Photography Club Logo">
+    <h1>GPREC PHOTOGRAPHY AND VIDEOGRAPHY CLUB</h1>
+    <p>Official Member Verification Portal</p>
+  </div>
+
+  <div class="login-box">
+    <p>Enter Member ID</p>
+    <input type="text" id="idInput" placeholder="PVC-001">
+    <button onclick="verifyMember()">Verify Member</button>
+    <div class="error" id="errorMsg">Member not found</div>
+  </div>
+
+  <div class="profile" id="profileCard">
+    <img id="profileImg">
+    <h2 id="profileName"></h2>
+    <div class="info"><b>Member ID:</b> <span id="profileId"></span></div>
+    <div class="info"><b>Roll No:</b> <span id="profileRoll"></span></div>
+    <div class="info"><b>Year:</b> <span id="profileYear"></span></div>
+    <div class="info"><b>Branch:</b> <span id="profileBranch"></span></div>
+    <div class="status" id="profileStatus"></div>
+  </div>
+
+</div>
+
+<script>
+const members = [
+{id:"PVC-001",name:"A.Krishna Chaitanya",roll:"239X1A0435",year:"III",branch:"ECE",status:"Active",photo:"images/PVC-001.jpeg"},
+{id:"PVC-002",name:"M.Vanyusha",roll:"239X1A05D5",year:"III",branch:"CSE",status:"Active",photo:"images/PVC-002.jpeg"},
+{id:"PVC-003",name:"M.Harshitha",roll:"239X1A3267",year:"III",branch:"CSE(DATA SCIENCE)",status:"Active",photo:"images/PVC-003.jpeg"},
+{id:"PVC-004",name:"B.Bala Govardhan",roll:"239X1A0116",year:"III",branch:"CE",status:"Active",photo:"images/PVC-004.jpeg"},
+{id:"PVC-005",name:"B.Rama Lakshmi",roll:"239X1A3208",year:"III",branch:"CSE(DATA SCIENCE)",status:"Active",photo:"images/PVC-005.jpeg"},
+{id:"PVC-006",name:"A.Sai Ashritha",roll:"239X1A3201",year:"III",branch:"CSE(DATA SCIENCE)",status:"Active",photo:"images/PVC-006.jpeg"},
+{id:"PVC-007",name:"TVNS.Vishnu",roll:"239X1A2941",year:"III",branch:"CSE(BUSINESS SYSTEMS)",status:"Active",photo:"images/PVC-007.jpeg"},
+{id:"PVC-008",name:"G.Manoj",roll:"249XA02047",year:"II",branch:"EEE",status:"Active",photo:"images/PVC-008.jpeg"},
+{id:"PVC-009",name:"R.Hemanth Kumar Reddy",roll:"249XA02107",year:"II",branch:"EEE",status:"Active",photo:"images/PVC-009.jpg"},
+{id:"PVC-010",name:"Tharaka Lakshmi",roll:"249XA04073",year:"II",branch:"ECE",status:"Active",photo:"images/PVC-010.jpeg"},
+{id:"PVC-011",name:"P.Mahathi",roll:"249XA33136",year:"II",branch:"CSE(AI&ML)",status:"Active",photo:"images/PVC-011.jpeg"},
+{id:"PVC-012",name:"B.Sravani",roll:"249XA33015",year:"II",branch:"CSE(AI&ML)",status:"Active",photo:"images/PVC-012.jpeg"},
+{id:"PVC-013",name:"A.Srujana",roll:"249XA33001",year:"II",branch:"CSE(AI&ML)",status:"Active",photo:"images/PVC-013.jpeg"},
+{id:"PVC-014",name:"K.Uday Prakash Reddy",roll:"239X1A3246",year:"III",branch:"CSE(DATA SCIENCE)",status:"Active",photo:"images/PVC-014.jpeg"},
+{id:"PVC-015",name:"M.Sravanthi",roll:"239X1A04F5",year:"III",branch:"ECE",status:"Active",photo:"images/PVC-015.jpeg"},
+{id:"PVC-016",name:"B.Pavan Kumar",roll:"249XA04051",year:"II",branch:"ECE",status:"Active",photo:"images/PVC-016.jpeg"},
+{id:"PVC-017",name:"V.Subhakaran Sathvik",roll:"249XA04188",year:"II",branch:"ECE",status:"Active",photo:"images/PVC-017.jpeg"},
+{id:"PVC-018",name:"L.Dhinakar Reddy",roll:"249XA05176",year:"II",branch:"CSE",status:"Active",photo:"images/PVC-018.jpeg"},
+{id:"PVC-019",name:"Lakshmi Sharanya",roll:"249XA33002",year:"II",branch:"CSE(AI&ML)",status:"Active",photo:"images/PVC-019.jpeg"},
+{id:"PVC-020",name:"G.Gnaneswar",roll:"249XA33101",year:"II",branch:"CSE(AI&ML)",status:"Active",photo:"images/PVC-020.jpeg"},
+{id:"PVC-021",name:"B.V Gowtham",roll:"239X1A0542",year:"III",branch:"CSE",status:"Active",photo:"images/PVC-021.jpeg"},
+{id:"PVC-022",name:"G.Kethana",roll:"239X1A0529",year:"III",branch:"CSE",status:"Active",photo:"images/PVC-022.jpeg"},
+{id:"PVC-023",name:"C.Geethanjali",roll:"239X1A3211",year:"III",branch:"CSE(DATA SCIENCE)",status:"Active",photo:"images/PVC-023.jpeg"},
+{id:"PVC-024",name:"C.Dhathri",roll:"239X1A3312",year:"III",branch:"CSE(AI&ML)",status:"Active",photo:"images/PVC-024.jpeg"},
+{id:"PVC-025",name:"D.Shanmukha Sai",roll:"249XA05061",year:"II",branch:"CSE",status:"Active",photo:"images/PVC-025.jpeg"},
+{id:"PVC-026",name:"M.Nikhil",roll:"249XA32102",year:"II",branch:"CSE(DATA SCIENCE)",status:"Active",photo:"images/PVC-026.jpeg"},
+{id:"PVC-027",name:"B.Dheeraj Kumar",roll:"239X1A0440",year:"III",branch:"ECE",status:"Active",photo:"images/PVC-027.jpeg"},
+{id:"PVC-028",name:"K.Mohammed Sowban",roll:"249XA33106",year:"II",branch:"CSE(AI&ML)",status:"Active",photo:"images/PVC-028.jpeg"},
+{id:"PVC-029",name:"Panyam Nikhitha",roll:"249XA05218",year:"II",branch:"CSE",status:"Active",photo:"images/PVC-029.jpeg"},
+{id:"PVC-030",name:"S.V Shahid",roll:"249XA33183",year:"II",branch:"CSE(AI&ML)",status:"Active",photo:"images/PVC-030.jpeg"}
+];
+
+function verifyMember(){
+  const input = document.getElementById("idInput").value.trim().toUpperCase();
+  const m = members.find(x => x.id === input);
+  const profile = document.getElementById("profileCard");
+  const error = document.getElementById("errorMsg");
+
+  if(!m){
+    profile.style.display="none";
+    error.style.display="block";
+    return;
+  }
+  document.getElementById("profileImg").src=m.photo;
+  document.getElementById("profileName").innerText=m.name;
+  document.getElementById("profileId").innerText=m.id;
+  document.getElementById("profileRoll").innerText=m.roll;
+  document.getElementById("profileYear").innerText=m.year;
+  document.getElementById("profileBranch").innerText=m.branch;
+  document.getElementById("profileStatus").innerText=m.status;
+
+  error.style.display="none";
+  profile.style.display="block";
+}
+</script>
+
+</body>
+</html>
